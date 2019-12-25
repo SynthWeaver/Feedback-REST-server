@@ -57,14 +57,14 @@ public class FeedbackTable {
         return feedbacks;
     }
 
-    public ResponseEntity<Object> updateFeedback(String oldFeedbackId, Feedback newFeedback) throws Exception {
+    public ResponseEntity<Object> updateFeedback(Feedback oldFeedback, Feedback newFeedback) throws Exception {
 
         String query = "UPDATE feedback SET name = ?, feedback = ? WHERE id = ?";
         PreparedStatement preparedStatement = dbMethods.getPreparedStatementFromQuery(query);
 
         preparedStatement.setString(1, newFeedback.getName());
         preparedStatement.setString(2, newFeedback.getFeedback());
-        preparedStatement.setString(3, oldFeedbackId);
+        preparedStatement.setString(3, oldFeedback.getId().toString());
         preparedStatement.executeUpdate();
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }

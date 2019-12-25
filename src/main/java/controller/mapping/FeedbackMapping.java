@@ -1,7 +1,7 @@
 package controller.mapping;
 
 import database.tables.FeedbackTable;
-import model.User;
+import model.Feedback;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -15,41 +15,35 @@ public class FeedbackMapping {
     private FeedbackTable feedbackTable = new FeedbackTable();
 
     @ResponseBody
-    @RequestMapping(value = "/create/user", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> createUser(@RequestBody User user) throws SQLException {
-        return feedbackTable.createFeedback(user);
+    @RequestMapping(value = "/create/feedback", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Object> createFeedback(@RequestBody Feedback feedback) throws SQLException {
+        return feedbackTable.createFeedback(feedback);
     }
 
     @ResponseBody
-    @GetMapping("/read/user/{email}")
-    public User readUser(@PathVariable("email") String email) throws SQLException{
-        return feedbackTable.readFeedback(email);
+    @GetMapping("/read/feedback/{id}")
+    public Feedback readUser(@PathVariable("id") String id) throws SQLException{
+        return feedbackTable.readFeedback(id);
     }
 
     @ResponseBody
-    @GetMapping("/read/users")
-    public List<User> readUsers() throws SQLException{
+    @GetMapping("/read/feedbacks")
+    public List<Feedback> readFeedbacks() throws SQLException{
         return feedbackTable.readFeedbacks();
     }
 
     @ResponseBody
-    @RequestMapping(value = "/update/user", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> updateUser(@RequestBody List<User> users) throws Exception {
-        User oldUser = users.get(0);
-        User newUser = users.get(1);
+    @RequestMapping(value = "/update/feedback", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Object> updateFeedback(@RequestBody List<Feedback> feedbacks) throws Exception {
+        Feedback oldFeedback = feedbacks.get(0);
+        Feedback newFeedback = feedbacks.get(1);
 
-        return feedbackTable.updateFeedback(oldUser, newUser);
+        return feedbackTable.updateFeedback(oldFeedback, newFeedback);
     }
 
     @ResponseBody
-    @RequestMapping(value = "/delete/user", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> deleteUser(@RequestBody User user) throws Exception {
-        return feedbackTable.deleteFeedback(user);
-    }
-
-    @ResponseBody
-    @RequestMapping(value = "/login", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public boolean login(@RequestBody User user) throws Exception {
-        return feedbackTable.login(user);
+    @RequestMapping(value = "/delete/feedback/{id}", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Object> deleteFeedback(@PathVariable String id) throws Exception {
+        return feedbackTable.deleteFeedback(id);
     }
 }
