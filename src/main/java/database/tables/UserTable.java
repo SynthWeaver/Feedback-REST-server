@@ -1,22 +1,20 @@
-package database;
+package database.tables;
 
+import database.DBMethods;
 import model.User;
 import objects.Password;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserDB {
-    public PreparedStatement getPreparedStatementFromQuery(String query) throws SQLException {
-        Connection connection = DBConnection.connection();
-        return connection.prepareStatement(query);
-    }
+public class UserTable {
+
+    DBMethods dbMethods = new DBMethods();
 
     //
     // MAIN QUERIES
@@ -33,7 +31,7 @@ public class UserDB {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
 
-        PreparedStatement preparedStatement = this.getPreparedStatementFromQuery(query);
+        PreparedStatement preparedStatement = dbMethods.getPreparedStatementFromQuery(query);
         preparedStatement.setString(1, user.getEmail());
         preparedStatement.setString(2, hashedPassword);
 
@@ -43,7 +41,7 @@ public class UserDB {
 
     public User readUser(String email) throws SQLException {
         String query = "SELECT * FROM user WHERE email = ?";
-        PreparedStatement preparedStatement = this.getPreparedStatementFromQuery(query);
+        PreparedStatement preparedStatement = dbMethods.getPreparedStatementFromQuery(query);
 
         preparedStatement.setString(1, email);
         ResultSet resultSet = preparedStatement.executeQuery();
@@ -57,7 +55,7 @@ public class UserDB {
 
     public List<User> readUsers() throws SQLException {
         String query = "SELECT * FROM user";
-        PreparedStatement preparedStatement = this.getPreparedStatementFromQuery(query);
+        PreparedStatement preparedStatement = dbMethods.getPreparedStatementFromQuery(query);
 
         ResultSet resultSet = preparedStatement.executeQuery();
         List<User> users = new ArrayList<>();
@@ -75,7 +73,7 @@ public class UserDB {
         }
 
         String query = "UPDATE user SET email = ?, password = ? WHERE email = ?";
-        PreparedStatement preparedStatement = this.getPreparedStatementFromQuery(query);
+        PreparedStatement preparedStatement = dbMethods.getPreparedStatementFromQuery(query);
 
         String hashedPassword = null;
         try {
@@ -99,7 +97,7 @@ public class UserDB {
         }
 
         String query = "DELETE FROM user WHERE email = ?";
-        PreparedStatement preparedStatement = this.getPreparedStatementFromQuery(query);
+        PreparedStatement preparedStatement = dbMethods.getPreparedStatementFromQuery(query);
 
         preparedStatement.setString(1, user.getEmail());
         preparedStatement.executeUpdate();
