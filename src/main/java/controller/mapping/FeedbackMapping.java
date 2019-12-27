@@ -42,7 +42,7 @@ public class FeedbackMapping {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/delete/feedback/{id}", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/delete/feedback/{id}", method = RequestMethod.POST, consumes = MediaType.ALL_VALUE)
     public ResponseEntity<Object> deleteFeedback(@PathVariable String id) throws Exception {
         return feedbackTable.deleteFeedback(id);
     }
